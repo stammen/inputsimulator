@@ -23,15 +23,6 @@ Concurrency::task<bool> LaunchWin32App();
 
 extern "C" {
 
-    DLL_API bool Initialize()
-    {
-#ifdef MS_UWP
-        LaunchWin32App();
-        ConnectToAppService(L"UWP-App");
-#endif
-        return true;
-    }
-
 #ifdef MS_UWP
 	DLL_API short GetKeyState(unsigned short virtualKeyCode)
 	{
@@ -91,7 +82,7 @@ extern "C" {
 	}
 
 
-	DLL_API bool SendInput(INPUT* inputs, int numInputs, int cbSize)
+	bool DoSendInput(int numInputs, INPUT* inputs, int cbSize)
 	{
 		bool result = true;
 
@@ -120,6 +111,36 @@ extern "C" {
 
 		return result;
 	}
+
+	DLL_API bool SendInput(int numInputs, INPUT* inputs, int cbSize)
+	{
+		bool result = true;
+
+		if (s_appServiceListener == nullptr)
+		{
+			auto task = ConnectToAppService(L"UWP-App");
+			try
+			{
+				task.get(); // blocks until Connection task completes
+
+				if (s_appServiceListener != nullptr && s_appServiceListener->IsConnected())
+				{
+					result = DoSendInput(numInputs, inputs, cbSize);
+				}
+			}
+			catch (Platform::Exception^ ex)
+			{
+				OutputDebugString(ex->Message->Data());
+			}
+
+		}
+		else
+		{
+			result = DoSendInput(numInputs, inputs, cbSize);
+		}
+
+		return result;
+}
 #else
     DLL_API bool SendInputWin32(INPUT* input, int numInputs)
     {

@@ -33,7 +33,7 @@ typedef struct tagINPUT {
 extern "C" {
 #ifdef MS_UWP
 	DLL_API bool Initialize();
-    DLL_API bool SendInput(INPUT* inputs, int numInputs, int cbSize);
+    DLL_API bool SendInput(int numInputs, INPUT* inputs, int cbSize);
 	DLL_API short GetKeyState(unsigned short virtualKeyCode);
 	DLL_API short GetAsyncKeyState(unsigned short virtualKeyCode);
 #endif

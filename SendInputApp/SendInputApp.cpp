@@ -230,8 +230,6 @@ private:
         return response;
     }
 
-
-
     MRAppService::MRAppServiceListener^ m_appServiceListener;
     bool m_quitting;
 };

@@ -20,7 +20,6 @@ ValueSet^ AppService::s_data = nullptr;
 std::mutex AppService::s_mutex;
 std::map<Platform::String^, Windows::ApplicationModel::AppService::AppServiceConnection^> AppService::s_connectionMap;
 
-
 AppService::AppService()
 {
 }

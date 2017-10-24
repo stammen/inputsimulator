@@ -10,9 +10,6 @@ namespace WindowsInput.Native
     {
 #if WINDOWS_UWP
         [DllImport("SendInput-UWP.dll", SetLastError = true)]
-        public static extern bool Initialize();
-
-        [DllImport("SendInput-UWP.dll", SetLastError = true)]
         public static extern Int16 GetKeyState(UInt16 virtualKeyCode);
 
         [DllImport("SendInput-UWP.dll", SetLastError = true)]
