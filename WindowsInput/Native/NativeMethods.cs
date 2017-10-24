@@ -8,6 +8,20 @@ namespace WindowsInput.Native
     /// </summary>
     internal static class NativeMethods
     {
+#if WINDOWS_UWP
+        [DllImport("SendInput-UWP.dll", SetLastError = true)]
+        public static extern bool Initialize();
+
+        [DllImport("SendInput-UWP.dll", SetLastError = true)]
+        public static extern Int16 GetKeyState(UInt16 virtualKeyCode);
+
+        [DllImport("SendInput-UWP.dll", SetLastError = true)]
+        public static extern Int16 GetAsyncKeyState(UInt16 virtualKeyCode);
+
+        [DllImport("SendInput-UWP.dll", SetLastError = true)]
+        public static extern UInt32 SendInput(UInt32 numberOfInputs, INPUT[] inputs, Int32 sizeOfInputStructure);
+#else
+
         /// <summary>
         /// The GetAsyncKeyState function determines whether a key is up or down at the time the function is called, and whether the key was pressed after a previous call to GetAsyncKeyState. (See: http://msdn.microsoft.com/en-us/library/ms646293(VS.85).aspx)
         /// </summary>
@@ -97,5 +111,6 @@ namespace WindowsInput.Native
         /// <remarks>To set a thread's extra message information, use the SetMessageExtraInfo function. </remarks>
         [DllImport("user32.dll")]
         public static extern IntPtr GetMessageExtraInfo();
+#endif
     }
 }

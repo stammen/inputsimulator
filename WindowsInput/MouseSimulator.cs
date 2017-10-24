@@ -253,7 +253,11 @@ namespace WindowsInput
         /// <param name="millsecondsTimeout">The number of milliseconds to wait.</param>
         public IMouseSimulator Sleep(int millsecondsTimeout)
         {
+#if WINDOWS_UWP
+            System.Threading.Tasks.Task.Delay(millsecondsTimeout).Wait();
+#else
             Thread.Sleep(millsecondsTimeout);
+#endif
             return this;
         }
 
@@ -263,7 +267,11 @@ namespace WindowsInput
         /// <param name="timeout">The time to wait.</param>
         public IMouseSimulator Sleep(TimeSpan timeout)
         {
+#if WINDOWS_UWP
+            System.Threading.Tasks.Task.Delay(timeout).Wait();
+#else
             Thread.Sleep(timeout);
+#endif
             return this;
         }
     }
