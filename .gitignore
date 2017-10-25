@@ -3,6 +3,20 @@
 *.DS_Store
 *.vs
 
+# Build results
+[Dd]ebug/
+[Dd]ebugPublic/
+[Rr]elease/
+[Rr]eleases/
+[Gg]enerated Files/
+x64/
+x86/
+build/
+bld/
+[Bb]in/
+[Oo]bj/
+BundleArtifacts/
+
 #Visual Studio files
 *.[Oo]bj
 *.user
