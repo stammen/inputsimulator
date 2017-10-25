@@ -106,8 +106,8 @@ private:
             {
                 while (!m_quitting)
                 {
-                    // ping the UWP app every second
-                    Sleep(1000);
+                    // ping the UWP app every 10 seconds and exit if Ping fails
+                    Sleep(10000);
                     Ping();
                 }
             }
