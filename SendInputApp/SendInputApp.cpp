@@ -22,6 +22,7 @@ class SendInputUWP : public MRAppService::IMRAppServiceListenerDelegate
 public:
     SendInputUWP()
         : m_appServiceListener(nullptr)
+        , m_quitting(false)
     {
 
     }
@@ -65,6 +66,7 @@ private:
 
         m_appServiceListener->SendPing(L"MR-App").then([this](AppServiceResponse^ response)
         {
+
             if (response->Status != AppServiceResponseStatus::Success)
             {
                 m_quitting = true;
@@ -81,6 +83,10 @@ private:
                     {
                         m_quitting = true;
                     }
+                }
+                else
+                {
+                    m_quitting = true;
                 }
             }
         });
