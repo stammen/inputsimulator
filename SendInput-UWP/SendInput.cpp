@@ -62,6 +62,7 @@ extern "C" {
             message->Insert(L"wScan", static_cast<int>(input->wScan));
             message->Insert(L"dwFlags", static_cast<unsigned int>(input->dwFlags));
             message->Insert(L"time", static_cast<unsigned int>(input->time));
+            s_appServiceListener->SendAppServiceMessage(L"Win32-App", message);
             return true;
         }
         return false;
@@ -76,7 +77,8 @@ extern "C" {
 			message->Insert(L"uMsg", static_cast<unsigned int>(input->uMsg));
 			message->Insert(L"wParamL", static_cast<int>(input->wParamL));
 			message->Insert(L"wParamH", static_cast<int>(input->wParamH));
-			return true;
+            s_appServiceListener->SendAppServiceMessage(L"Win32-App", message);
+            return true;
 		}
 		return false;
 	}
