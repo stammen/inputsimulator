@@ -84,29 +84,38 @@ extern "C" {
 	}
 
 
-	bool DoSendInput(int numInputs, INPUT* inputs, int cbSize)
+	unsigned int DoSendInput(unsigned int numInputs, INPUT* inputs, int cbSize)
 	{
-		bool result = true;
+        unsigned int result = 0;
 
-		for (int i = 0; i < numInputs; ++i)
+		for (unsigned int i = 0; i < numInputs; ++i)
 		{
 			auto input = inputs[i];
 			switch (input.type)
 			{
 			case INPUT_MOUSE:
-				SendMouseInputUWP(&input.mi);
+                if (SendMouseInputUWP(&input.mi))
+                {
+                    result++;
+                }
 				break;
 
 			case INPUT_KEYBOARD:
-				SendKeyboardInputUWP(&input.ki);
+                if(SendKeyboardInputUWP(&input.ki))
+                {
+                    result++;
+                }
 				break;
 
 			case INPUT_HARDWARE:
-				SendHardwareInputUWP(&input.hi);
-				break;
+                if(SendHardwareInputUWP(&input.hi))
+                {
+                    result++;
+                }
+                break;
 
 			default:
-				result = false;
+				result = 0;
 				break;
 			}
 		}
@@ -114,9 +123,9 @@ extern "C" {
 		return result;
 	}
 
-	DLL_API bool SendInput(int numInputs, INPUT* inputs, int cbSize)
+	DLL_API unsigned int SendInput(unsigned int numInputs, INPUT* inputs, int cbSize)
 	{
-		bool result = true;
+        unsigned int result = numInputs;
 
 		if (s_appServiceListener == nullptr)
 		{
