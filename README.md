@@ -157,7 +157,7 @@ Add the following Extensions to your Application section
         <uap:Extension Category="windows.protocol" Executable="SendInputApp\SendInputApp.exe" EntryPoint="Windows.FullTrustApplication">
           <uap:Protocol Name="sendinput-win32" />
         </uap:Extension>
-        <uap:Extension Category="windows.appService" EntryPoint="MRAppService.AppService">
+        <uap:Extension Category="windows.appService">
           <uap:AppService Name="com.sendinput.appservice" />
         </uap:Extension>
       </Extensions>
