@@ -171,6 +171,15 @@ Add the runFullTrust capability
   </Capabilities>
 ```
 
+*	Add the following code to App.h
+
+```c++
+#include <vector>
+
+private:
+        void OnBackgroundActivated(Platform::Object^ sender, Windows::ApplicationModel::Activation::BackgroundActivatedEventArgs^ args);
+        std::vector<MRAppService::AppService^> m_appServices;
+```
 
 *	Add the following code to the App::Initialize() method in App.cpp
 
@@ -186,12 +195,21 @@ void App::Initialize(CoreApplicationView^ applicationView)
     m_AppCallbacks = ref new AppCallbacks();
     m_AppCallbacks->SetCoreApplicationViewEvents(applicationView);
     applicationView->Activated += ref new TypedEventHandler<CoreApplicationView ^, IActivatedEventArgs^>(this, &App::OnActivated);
+    CoreApplication::BackgroundActivated += ref new EventHandler<BackgroundActivatedEventArgs^>(this, &App::OnBackgroundActivated);
 
-    // Launch the SendInput Win32 App
+    // Launch the Win32 App
     auto uri = ref new Uri("sendinput-win32:"); // The protocol handled by the launched app
     auto options = ref new LauncherOptions();
     concurrency::task<bool> task(Launcher::LaunchUriAsync(uri, options));
 }
+
+void App::OnBackgroundActivated(Platform::Object^ sender, Windows::ApplicationModel::Activation::BackgroundActivatedEventArgs^ args)
+{
+    auto appService = ref new MRAppService::AppService();
+    appService->Run(args->TaskInstance);
+    m_appServices.push_back(appService);
+}
+
 ```
 
 You should now be able to build and run your UWP app with SendInput working. This will also continue to work from the editor. This solution should allow you to use your original inputsimulator code from Unity without any changes.
