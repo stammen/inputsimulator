@@ -14,7 +14,8 @@ namespace MRAppService
         App_Register,
         App_Unregister,
         App_Message,
-        App_Ping
+        App_Ping,
+        App_Quit
     };
 
     interface IMRAppServiceListenerDelegate

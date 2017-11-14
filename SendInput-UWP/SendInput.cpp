@@ -83,7 +83,6 @@ extern "C" {
 		return false;
 	}
 
-
 	unsigned int DoSendInput(unsigned int numInputs, INPUT* inputs, int cbSize)
 	{
         unsigned int result = 0;
@@ -125,15 +124,14 @@ extern "C" {
 
 	DLL_API unsigned int SendInput(unsigned int numInputs, INPUT* inputs, int cbSize)
 	{
-        unsigned int result = numInputs;
+        unsigned int result = 0;
 
 		if (s_appServiceListener == nullptr)
 		{
 			auto task = ConnectToAppService(L"UWP-App");
 			try
 			{
-				task.get(); // blocks until Connection task completes
-
+                task.get(); // blocks until Connect task completes
 				if (s_appServiceListener != nullptr && s_appServiceListener->IsConnected())
 				{
 					result = DoSendInput(numInputs, inputs, cbSize);

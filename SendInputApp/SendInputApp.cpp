@@ -60,38 +60,6 @@ private:
         });
     }
 
-    void Ping()
-    {
-        ValueSet^ message = ref new ValueSet();
-
-        m_appServiceListener->SendPing(L"MR-App").then([this](AppServiceResponse^ response)
-        {
-
-            if (response->Status != AppServiceResponseStatus::Success)
-            {
-                m_quitting = true;
-            }
-            else
-            {
-                auto responseMessage = response->Message;
-
-                // The response from the MR-App contains the info we need to open the shared texture
-                if (responseMessage->HasKey(L"Status"))
-                {
-                    auto status = dynamic_cast<Platform::String^>(responseMessage->Lookup(L"Status"));
-                    if (status != L"OK")
-                    {
-                        m_quitting = true;
-                    }
-                }
-                else
-                {
-                    m_quitting = true;
-                }
-            }
-        });
-    }
-
     void AppThread()
     {
         m_quitting = false;
@@ -107,8 +75,7 @@ private:
                 while (!m_quitting)
                 {
                     // ping the UWP app every 10 seconds and exit if Ping fails
-                    Sleep(10000);
-                    Ping();
+                    Sleep(1000);
                 }
             }
 
@@ -147,6 +114,11 @@ private:
             break;
 
         case MRAppServiceMessage::App_Ping:
+            response->Insert(L"Status", "OK");
+            break;
+
+        case MRAppServiceMessage::App_Quit:
+            m_quitting = true;
             response->Insert(L"Status", "OK");
             break;
 

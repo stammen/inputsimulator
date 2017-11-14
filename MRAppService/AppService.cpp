@@ -119,8 +119,6 @@ void AppService::SendConnectedApps(Platform::String^ appId, AppServiceConnection
     taskgroup.wait();
 }
 
-
-
 void AppService::ForwardMessage(Platform::String^ id, ValueSet^ message, AppServiceRequest^ request, AppServiceDeferral^ deferral)
 {
     AppServiceConnection^ appServiceConnection = nullptr;
@@ -204,6 +202,11 @@ void AppService::OnRequestReceived(AppServiceConnection^ sender, AppServiceReque
 
 void AppService::OnTaskCanceled(IBackgroundTaskInstance^ sender, BackgroundTaskCancellationReason reason)
 {
+    ValueSet^ message = ref new ValueSet();
+    message->Insert(L"Message", static_cast<int>(MRAppServiceMessage::App_Quit));
+    message->Insert(L"SenderId", L"MR_AppService");
+    BroadcastMessage(message, L"MR_AppService");
+
 	if (m_backgroundTaskDeferral != nullptr)
 	{
 		// Complete the service deferral.
